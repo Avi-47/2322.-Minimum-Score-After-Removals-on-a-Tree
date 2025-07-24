@@ -3,7 +3,7 @@
 [🔗 LeetCode Problem](https://leetcode.com/problems/minimum-score-after-removals-on-a-tree/)  
 **Difficulty:** Hard  
 **Topics:** DFS, Graph, Tree, XOR, Bit Manipulation  
-**Language:** Java  
+![Difficulty](https://img.shields.io/badge/Difficulty-Hard-red)
 ![Status](https://img.shields.io/badge/Status-Solved-brightgreen.svg)
 ![Language](https://img.shields.io/badge/Language-Java-blue.svg)
 

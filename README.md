@@ -21,12 +21,13 @@ Return the **minimum possible score** across all valid edge removal combinations
 ## 🔍 Example
 
 ### Example 1:
-Input:
-nums = [1,5,5,4,11]
-edges = [[0,1],[1,2],[1,3],[3,4]]
+```text
+Input: 
+nums = [1, 5, 5, 4, 11]
+edges = [[0,1], [1,2], [1,3], [3,4]]
 
 Output: 9
-
+```
 Explanation:
 Remove edges [1,2] and [3,4]:
 
@@ -37,25 +38,41 @@ Component 2: [4] => XOR = 11
 Component 3: [0,1,2] => XOR = 1 ^ 5 ^ 5 = 1
 Score = 11 - 2 = 9
 
-
 ---
 
-## 🚀 Solution Idea
+🚀 Solution Idea
+💡 Strategy
+DFS Preprocessing:
 
-We want to **remove 2 edges** in a **tree** to split it into **3 components** and then calculate the XOR value of each.
+Traverse the tree using DFS from the root.
 
-### Strategy
+Calculate:
 
-1. **DFS Traversal:**
-   - Pre-compute the **XOR sum of all subtrees** and track **in/out times** for each node to help identify ancestor relationships.
+sum[i]: XOR of the subtree rooted at node i.
 
-2. **Pairwise Edge Simulation:**
-   - For every **pair of nodes** `i` and `j`, simulate removing the edges above them (excluding root).
-   - Use `in[i] < in[j] < out[i]` to determine if `j` is in the subtree of `i`.
-   - Depending on whether nodes are nested or independent, compute the resulting component XORs differently.
+in[i] and out[i]: timestamps for Euler Tour, used to determine if one node is in another’s subtree.
 
-3. **Minimize the Score:**
-   - Calculate the score as `max(xor1, xor2, xor3) - min(xor1, xor2, xor3)` for each case and return the **minimum**.
+Simulate All Valid Edge Removals:
+
+For every pair of non-root nodes i and j, simulate the effect of removing the edges above them.
+
+Three scenarios are possible:
+
+Nested Subtree: One is in the subtree of the other.
+
+Independent Subtrees: Nodes i and j lie in separate branches.
+
+Component XOR Calculation:
+
+Use the XOR sums and parent-child relationships to calculate the XOR values of the resulting three components efficiently, without physically removing edges.
+
+Score Calculation:
+
+For each pair of nodes (and simulated edge removals), compute the XORs of the 3 resulting components.
+
+Update the result with the minimum score found.
+
+
 
 ---
 
@@ -119,9 +136,11 @@ Space Complexity: O(n)
 
 For storing sums, in/out times, and the tree adjacency list.
 
-🧠 Notes
-in[] and out[] are used to determine ancestor-descendant relationships using Euler Tour technique.
+📌 Notes
+The Euler Tour technique with in[] and out[] arrays helps determine if a node is in another node’s subtree in constant time.
 
-XOR is a non-commutative and bitwise operation, which makes prefix XOR and subtree XOR particularly useful.
+Subtree XOR is critical. Instead of recomputing XORs from scratch each time, we reuse precomputed values using tree properties.
 
-This approach avoids actually removing edges — instead, it simulates the logical separation based on subtree analysis.
+We avoid actual edge deletions and simulate the effect logically using XOR and DFS properties.
+
+A subtle part is to recognize that removing two edges gives us exactly three components and we can precisely calculate their values without disconnecting the tree.
